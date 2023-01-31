@@ -8,9 +8,9 @@ Note that this schedule is for learning rust in your spare time, outside of work
 
 Week 1, Day 1: Introduction to Rust basics (variables, data types, functions)
 -   Goals:
-    -   Understand the basic syntax and structure of Rust
-    -   Learn how to declare and manipulate variables
-    -   Learn about the different data types available in Rust
+    [x]   Understand the basic syntax and structure of Rust
+    [x]  Learn how to declare and manipulate variables
+    [x]  Learn about the different data types available in Rust
 -   Materials:
     -   Rust installation and setup
     -   Rust documentation and tutorials
