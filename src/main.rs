@@ -1,65 +1,40 @@
-// strings
+use std::io;  // input/output from standard library
+use std::cmp::Ordering;
+use rand::Rng;
 
 fn main() {
-    // In general, the `{}` will be automatically replaced with any
-    // arguments. These will be stringified.
-    println!("{} days", 31);
+    println!("Guess the number!");
 
-    // Positional arguments can be used. Specifying an integer inside `{}`
-    // determines which additional argument will be replaced. Arguments start
-    // at 0 immediately after the format string
-    println!("{0}, this is {1}. {1}, this is {0}", "Alice", "Bob");
+    let secret_number = rand::thread_rng().gen_range(1..=100);
 
-    // As can named arguments.
-    println!("{subject} {verb} {object}",
-             object="the lazy dog",
-             subject="the quick brown fox",
-             verb="jumps over");
+    // println!("The secret number is: {secret_number}.");
+    loop {
 
-    // Different formatting can be invoked by specifying the format character after a
-    // `:`.
-    println!("Base 10:               {}",   69420); //69420
-    println!("Base 2 (binary):       {:b}", 123); //10000111100101100
-    println!("Base 8 (octal):        {:o}", 69420); //207454
-    println!("Base 16 (hexadecimal): {:x}", 69420); //10f2c
-    println!("Base 16 (hexadecimal): {:X}", 69420); //10F2C
+        println!("Please input your guess.");
 
+        let mut guess = String::new();  // mutable variable (not rust default)
 
-    // You can right-justify text with a specified width. This will
-    // output "    1". (Four white spaces and a "1", for a total width of 5.)
-    println!("{number:>5}", number=1);
+        io::stdin()
+            .read_line(&mut guess)  // referencing a mutable variable to read and append to the arg guess
+            .expect("Failed to read line");
 
-    // You can pad numbers with extra zeroes,
-    //and left-adjust by flipping the sign. This will output "10000".
-    println!("{number:0<5}", number=1.01);
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("You need to input a number");
+                continue;
+            },
+        };
 
-    // You can use named arguments in the format specifier by appending a `$`
-    println!("{number:0>width$}", number=1, width=5);
+        println!("You guessed: {guess}");
 
-
-    // Rust even checks to make sure the correct number of arguments are
-    // used.
-    println!("My name is {0}, {1} {0}", "Bond", "James");
-
-    // Only types that implement fmt::Display can be formatted with `{}`. User-
-    // defined types do not implement fmt::Display by default
-
-    #[allow(dead_code)]
-    struct Structure(i32);
-
-    // This will not compile because `Structure` does not implement
-    // fmt::Display
-    // println!("This struct `{}` won't print...", Structure(3));
-    // TODO ^ Try uncommenting this line
-
-    // For Rust 1.58 and above, you can directly capture the argument from a
-    // surrounding variable. Just like the above, this will output
-    // "    1". 4 white spaces and a "1".
-    let number: f64 = 1.0;
-    let width: usize = 5;
-    println!("{number:>width$}");
-
-    let pi: f64 = 3.141592;
-    println!("Pi is roughly {testVar:.testPrecision$}", testVar=pi, testPrecision=3);
-    println!("{:.2}", 3.1);
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
+            Ordering::Equal => {
+                println!("You win!");
+                break;
+            }
+        }
+    }
 }
